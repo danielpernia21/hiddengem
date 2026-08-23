@@ -56,6 +56,7 @@ def eligible(state, today):
 
 
 def main(dry=False):
+    sys.stdout.reconfigure(encoding="utf-8")
     today = dt.date.today()
     state = load_state()
     window_start = today + dt.timedelta(days=LEAD_MIN_DAYS)

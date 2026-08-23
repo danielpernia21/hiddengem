@@ -52,3 +52,60 @@ REGIONS = [
     ("VNO", "Aukstaitija",                   5, [6,7,8,9],          "Lake district, wooden villages, almost no international visitors"),
     ("RIX", "Kurzeme / Latgale",             5, [6,7,8,9],          "Baltic dune coast or the lake belt on the Russian border"),
 ]
+
+# ---------------------------------------------------------------------------
+# PENDING — Ryanair's BCN network, rows you haven't scored yet.
+#
+# quiet=0 means main.py skips them (MIN_QUIET=3). They are inert until YOU
+# fill in the score and the reason. The region names below are candidates,
+# not research — check each one on a map before trusting it.
+#
+# Rule for the `why`: something that is true in a specific month and that
+# you could verify. Not "charming villages". If you can't write one, the
+# row doesn't belong here — delete it.
+#
+# Hubs left out on purpose (IBZ, PMI, MAH, DUB, MLA, PRG, VIE, BER, MXP,
+# STN/LTN, BRU, ARN, CPH): the airport IS the destination for most people,
+# so the satellite trick works badly. Add them back only if you find a real one.
+# ---------------------------------------------------------------------------
+
+PENDING = [
+    ("AHO", "Planargia / Bosa, Sardinia",      0, [], ""),
+    ("BLQ", "Appennino Bolognese",             0, [], ""),
+    ("PEG", "Valnerina / Monti Sibillini",     0, [], ""),
+    ("REG", "Aspromonte",                      0, [], ""),
+    ("TRN", "Val Maira / Valli Occitane",      0, [], ""),
+    ("BGY", "Val Brembana / Val Seriana",      0, [], ""),
+    ("VCE", "Val Belluna / Colli Euganei",     0, [], ""),
+    ("ZAD", "Velebit / inland Lika",           0, [], ""),
+    ("BTS", "Small Carpathians / Zahorie",     0, [], ""),
+    ("POZ", "Wielkopolska lake belt",          0, [], ""),
+    ("GDN", "Kashubia / Vistula Spit",         0, [], ""),
+    ("WMI", "Podlasie (Modlin, not WAW)",      0, [], ""),
+    ("CFU", "inland Corfu / Diapontia",        0, [], ""),
+    ("TLL", "Soomaa / Lahemaa",                0, [], ""),
+    ("LUX", "Eislek / Mullerthal",             0, [], ""),
+    ("CRL", "Ardennes / Gaume",                0, [], ""),
+    ("BVA", "Vexin / Picardy",                 0, [], ""),
+    ("CGN", "Eifel",                           0, [], ""),
+    ("HHN", "Hunsruck",                        0, [], ""),
+    ("ORK", "West Cork / Beara",               0, [], ""),
+    ("EDI", "Angus Glens",                     0, [], ""),
+    ("PIK", "Galloway Forest",                 0, [], ""),
+    ("NCL", "Cheviots / Northumberland",       0, [], ""),
+    ("EMA", "Charnwood / Peak fringe",         0, [], ""),
+    ("LPL", "Clwydian Range",                  0, [], ""),
+    ("BHX", "Welsh Marches / Shropshire",      0, [], ""),
+    ("BRS", "Forest of Dean / Exmoor",         0, [], ""),
+    ("MAN", "Forest of Bowland",               0, [], ""),
+    ("FEZ", "Middle Atlas / Sefrou",           0, [], ""),
+    ("RAK", "High Atlas valleys",              0, [], ""),
+    ("TNG", "Talassemtane / Rif",              0, [], ""),
+    ("NDR", "Beni Snassen",                    0, [], ""),
+    ("OUD", "Beni Snassen / Zegzel",           0, [], ""),
+    ("RBA", "Zerhoun / Moulay Idriss",         0, [], ""),
+    ("OZZ", "Draa valley",                     0, [], ""),
+]
+
+# Promote a row by moving it into REGIONS with a real score and reason.
+REGIONS = REGIONS + [r for r in PENDING if r[2] >= 3]

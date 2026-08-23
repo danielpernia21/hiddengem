@@ -34,7 +34,7 @@ def network():
     out = {}
     for item in r.json():
         ap = item.get("arrivalAirport", {})
-        code = ap.get("iataCode")
+        code = ap.get("code")
         if code:
             out[code] = (ap.get("name", "?"),
                          ap.get("country", {}).get("name", "?"))
@@ -57,7 +57,7 @@ def fares(weeks=10, min_nights=3, max_nights=5):
             "durationFrom": min_nights,
             "durationTo": max_nights,
             "currency": "EUR",
-            "limit": 500,
+            "limit": 20,  # API hard-caps this at 20; anything higher 400s with "InvalidLimit"
             "market": "es-es",
         },
         headers=UA, timeout=60)
@@ -76,6 +76,7 @@ def fares(weeks=10, min_nights=3, max_nights=5):
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")
     cap = float(sys.argv[sys.argv.index("--max") + 1]) if "--max" in sys.argv else 1e9
 
     try:

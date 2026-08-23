@@ -96,8 +96,9 @@ def _ryanair(dest, window_start, window_end, min_nights, max_nights):
         try:
             out, inb = f["outbound"], f["inbound"]
             dep = dt.date.fromisoformat(out["departureDate"][:10])
+            ret = dt.date.fromisoformat(inb["departureDate"][:10])
             price = float(out["price"]["value"]) + float(inb["price"]["value"])
-            nights = (dt.date.fromisoformat(inb["departureDate"][:10]) - dep).days
+            nights = (ret - dep).days
         except (KeyError, ValueError, TypeError):
             continue
         if dep.weekday() not in (3, 4):
@@ -109,7 +110,7 @@ def _ryanair(dest, window_start, window_end, min_nights, max_nights):
                 "nights": nights,
                 "url": f"https://www.ryanair.com/es/es/trip/flights/select?adults=1"
                        f"&originIata={ORIGIN}&destinationIata={dest}"
-                       f"&dateOut={dep.isoformat()}",
+                       f"&dateOut={dep.isoformat()}&dateIn={ret.isoformat()}",
             }
     return best
 
