@@ -1,0 +1,43 @@
+name: travelbot
+
+on:
+  schedule:
+    - cron: "0 7 * * 0"   # Sunday 09:00 Madrid (07:00 UTC, summer)
+    - cron: "0 20 * * *"  # nightly feedback sweep
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+
+      - name: Weekly suggestions
+        if: github.event.schedule == '0 7 * * 0' || github.event_name == 'workflow_dispatch'
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TRAVELPAYOUTS_TOKEN: ${{ secrets.TRAVELPAYOUTS_TOKEN }}
+          FARE_PROVIDER: ${{ vars.FARE_PROVIDER || 'ryanair' }}
+          ORIGIN: ${{ vars.ORIGIN || 'BCN' }}
+        run: python main.py
+
+      - name: Collect feedback
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        run: python feedback.py
+
+      - name: Commit state
+        run: |
+          git config user.name  "travelbot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -A state.json offset.json feedback.jsonl 2>/dev/null || true
+          git diff --quiet --cached || git commit -m "state $(date -u +%F)"
+          git push || true
