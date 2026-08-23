@@ -16,7 +16,8 @@ BUTTONS = [
 def _call(method, payload):
     token = os.environ["TELEGRAM_TOKEN"]
     r = requests.post(API.format(token, method), json=payload, timeout=TIMEOUT)
-    r.raise_for_status()
+    if not r.ok:
+        raise RuntimeError(f"Telegram {method} failed ({r.status_code}): {r.text}")
     return r.json()
 
 
