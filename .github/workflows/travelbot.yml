@@ -3,7 +3,7 @@ name: travelbot
 on:
   schedule:
     - cron: "0 7 * * 0"   # Sunday 09:00 Madrid (07:00 UTC, summer)
-    - cron: "0 20 * * *"  # nightly feedback sweep
+    - cron: "0 19 * * *"  # nightly feedback sweep
   workflow_dispatch:
 
 permissions:
