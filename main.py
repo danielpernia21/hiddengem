@@ -12,6 +12,7 @@ import pathlib
 import datetime as dt
 
 import fares
+import hotels
 import notify
 from regions import REGIONS
 
@@ -72,10 +73,15 @@ def main(dry=False):
                               MIN_NIGHTS, MAX_NIGHTS)
         if not fare or fare["price"] > MAX_PRICE:
             continue
-        priced.append({**c, **fare})
-        print(f"  ✓ {c['region']:<35} {fare['price']:>6.0f}€  {fare['depart']}")
+        dep = dt.date.fromisoformat(fare["depart"])
+        hotel = hotels.cheapest_safe(c["region"], dep,
+                                      dep + dt.timedelta(days=fare["nights"]))
+        total = fare["price"] + (hotel["price"] if hotel else 0)
+        priced.append({**c, **fare, "hotel": hotel, "total": total})
+        hotel_note = f" + {hotel['price']:.0f}€ hotel ({hotel['score']}/10)" if hotel else ""
+        print(f"  ✓ {c['region']:<35} {fare['price']:>6.0f}€{hotel_note}  {fare['depart']}")
 
-    # quiet first, price as tiebreak. One pick per airport.
+    # quiet first, flight price as tiebreak. One pick per airport.
     priced.sort(key=lambda p: (-p["quiet"], p["price"]))
     picks = []
     for p in priced:
@@ -96,8 +102,12 @@ def main(dry=False):
 
     for p in picks:
         if dry:
-            print(f"\n{p['region']} ({p['code']}) — {p['price']:.0f}€ "
-                  f"{p['depart']} {p['nights']}n\n{p['why']}\n{p['url']}")
+            hotel_line = (f"\n{p['hotel']['hotel']} ({p['hotel']['score']}/10): "
+                           f"{p['hotel']['price']:.0f}€ (total {p['total']:.0f}€)\n"
+                           f"{p['hotel']['url']}" if p["hotel"] else
+                           "\nno hotel quote")
+            print(f"\n{p['region']} ({p['code']}) — {p['price']:.0f}€ flight "
+                  f"{p['depart']} {p['nights']}n{hotel_line}\n{p['why']}\n{p['url']}")
         else:
             notify.send_suggestion(p)
             state[p["region"]] = today.isoformat()

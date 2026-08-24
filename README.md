@@ -37,6 +37,28 @@ Push to a private GitHub repo. Settings → Secrets: `TELEGRAM_TOKEN`,
 
 Amadeus Self-Service was decommissioned on 17 July 2026. Don't go looking.
 
+## Hotel prices
+
+Optional. Set `RAPIDAPI_KEY` (sign up at rapidapi.com, subscribe to the
+"Booking.com" API — host `booking-com15.p.rapidapi.com`, free tier has a
+small monthly quota, watch it) and picks get a cheapest-hotel quote and
+booking link added, shown as flight + hotel = total. Unset, `hotels.py` is
+skipped silently and picks show flight price only, same as before.
+
+Hotels are filtered to guest score ≥ 7.0/10 (Booking's 0-10 scale — roughly
+3.5/5 stars doubled, see `MIN_REVIEW_SCORE` in `hotels.py`) with confirmed
+availability for the trip dates; the cheapest one clearing both bars wins.
+
+Env var must be set as a proper Windows environment variable (not `.env` —
+this project doesn't load one) *before* the shell/terminal you run `python`
+in is opened; a shell started earlier won't see a var added after the fact.
+
+One known gap, see `hotels.py`'s module docstring for detail: regions in
+`regions.py` are editorial descriptions ("Sierra de Ayllon"), not real place
+names Booking.com's search recognizes — lookups resolve well under half the
+time even with fallback queries. Expect "no hotel quote" for those until
+regions get a real nearby town name to search on.
+
 ## What to actually do with it
 
 Nothing, for eight weeks. Just react to the buttons. Then:
