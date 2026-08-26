@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-Weekly run. Picks 3 quiet, reachable, priced trips and pushes them to Telegram.
+Runs Mon/Wed/Fri. Picks 1 quiet, reachable, priced trip and sends it the
+same day it's picked.
 
-  python main.py          send for real
+  python main.py          pick + send for real
   python main.py --dry    print to stdout, send nothing, touch no state
 """
 
@@ -23,7 +24,7 @@ LEAD_MIN_DAYS = 14      # earliest departure
 LEAD_MAX_DAYS = 70      # latest departure
 MIN_NIGHTS, MAX_NIGHTS = 3, 5
 COOLDOWN_DAYS = 56      # no region repeats inside 8 weeks
-N_PICKS = 3
+N_PICKS = 1
 # ----------------------------------------------------------------------------
 
 STATE = pathlib.Path(__file__).parent / "state.json"
