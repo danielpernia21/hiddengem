@@ -55,8 +55,6 @@ def _travelpayouts(dest, window_start, window_end, min_nights, max_nights):
             continue
         if not (min_nights <= nights <= max_nights):
             continue
-        if dep.weekday() not in (3, 4):  # Thu / Fri only
-            continue
         price = float(item["price"])
         if best is None or price < best["price"]:
             best = {
@@ -100,8 +98,6 @@ def _ryanair(dest, window_start, window_end, min_nights, max_nights):
             price = float(out["price"]["value"]) + float(inb["price"]["value"])
             nights = (ret - dep).days
         except (KeyError, ValueError, TypeError):
-            continue
-        if dep.weekday() not in (3, 4):
             continue
         if best is None or price < best["price"]:
             best = {
