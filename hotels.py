@@ -149,8 +149,15 @@ def _hotel_url(hotel_id, checkin, checkout, adults, fallback_name):
             timeout=TIMEOUT,
         )
         r.raise_for_status()
-        return r.json().get("data", {}).get("url") or _search_url(
-            fallback_name, checkin, checkout, adults)
+        url = r.json().get("data", {}).get("url")
+        if not url:
+            return _search_url(fallback_name, checkin, checkout, adults)
+        # the deep link carries no dates on its own — Booking.com defaults
+        # an undated hotel page to today, not the actual stay — so append
+        # them as query params same as the real site's date picker does.
+        sep = "&" if "?" in url else "?"
+        return (f"{url}{sep}checkin={checkin.isoformat()}"
+                f"&checkout={checkout.isoformat()}&group_adults={adults}")
     except Exception:
         return _search_url(fallback_name, checkin, checkout, adults)
 
