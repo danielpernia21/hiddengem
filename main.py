@@ -74,13 +74,8 @@ def main(dry=False):
                               MIN_NIGHTS, MAX_NIGHTS)
         if not fare or fare["price"] > MAX_PRICE:
             continue
-        dep = dt.date.fromisoformat(fare["depart"])
-        hotel = hotels.cheapest_safe(c["region"], dep,
-                                      dep + dt.timedelta(days=fare["nights"]))
-        total = fare["price"] + (hotel["price"] if hotel else 0)
-        priced.append({**c, **fare, "hotel": hotel, "total": total})
-        hotel_note = f" + {hotel['price']:.0f}€ hotel ({hotel['score']}/10)" if hotel else ""
-        print(f"  ✓ {c['region']:<35} {fare['price']:>6.0f}€{hotel_note}  {fare['depart']}")
+        priced.append({**c, **fare})
+        print(f"  ✓ {c['region']:<35} {fare['price']:>6.0f}€  {fare['depart']}")
 
     # quiet first, flight price as tiebreak. One pick per airport.
     priced.sort(key=lambda p: (-p["quiet"], p["price"]))
@@ -100,6 +95,15 @@ def main(dry=False):
         if not dry:
             notify.send_plain(msg)
         return
+
+    # hotel price only looked up for the actual pick(s) — keeps API usage
+    # to one region per run instead of one per priced candidate.
+    for p in picks:
+        dep = dt.date.fromisoformat(p["depart"])
+        hotel = hotels.cheapest_safe(p["region"], dep,
+                                      dep + dt.timedelta(days=p["nights"]))
+        p["hotel"] = hotel
+        p["total"] = p["price"] + (hotel["price"] if hotel else 0)
 
     for p in picks:
         if dry:
