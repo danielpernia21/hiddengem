@@ -176,6 +176,7 @@ def _cheapest_near(lat, lng, checkin, checkout, adults):
         timeout=TIMEOUT,
     )
     if r.status_code != 200:
+        print(f"  ! hotels search {r.status_code}: {r.text[:200]}")
         return None
 
     candidates = []
