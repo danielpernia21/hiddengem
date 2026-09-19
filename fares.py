@@ -88,6 +88,7 @@ def _ryanair(dest, window_start, window_end, min_nights, max_nights):
         timeout=TIMEOUT,
     )
     if r.status_code != 200:
+        print(f"  ! {dest}: ryanair {r.status_code}: {r.text[:200]}")
         return None
     best = None
     for f in r.json().get("fares", []):

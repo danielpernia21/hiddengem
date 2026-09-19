@@ -9,6 +9,12 @@ on:
 permissions:
   contents: write
 
+# Both crons land in the same minute after GitHub's delay; two jobs polling
+# Telegram getUpdates at once trip a 409 Conflict.
+concurrency:
+  group: travelbot
+  cancel-in-progress: false
+
 jobs:
   run:
     runs-on: ubuntu-latest
