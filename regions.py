@@ -47,7 +47,7 @@ REGIONS = [
     ("OTP", "Fagaras / Danube Delta",        4, [5,6,7,9],          "Alpine ridge or reed labyrinth, depending on the month"),
 
     ("KRK", "Beskids",                       4, [5,6,9,10],         "Wooden churches and empty ridge walks south of Krakow"),
-    ("WAW", "Podlasie",                      5, [5,6,9,10],         "Bialowieza primeval forest, bison, Tatar villages"),
+    ("WMI", "Podlasie",                      5, [5,6,9,10],         "Bialowieza primeval forest, bison, Tatar villages"),
     ("BUD", "Bukk / Villany",                4, [5,6,9,10],         "Cave baths and cellar-row wine villages"),
     ("VNO", "Aukstaitija",                   5, [6,7,8,9],          "Lake district, wooden villages, almost no international visitors"),
     ("RIX", "Kurzeme / Latgale",             5, [6,7,8,9],          "Baltic dune coast or the lake belt on the Russian border"),
@@ -81,7 +81,6 @@ PENDING = [
     ("BTS", "Small Carpathians / Zahorie",     0, [], ""),
     ("POZ", "Wielkopolska lake belt",          0, [], ""),
     ("GDN", "Kashubia / Vistula Spit",         0, [], ""),
-    ("WMI", "Podlasie (Modlin, not WAW)",      0, [], ""),
     ("CFU", "inland Corfu / Diapontia",        0, [], ""),
     ("TLL", "Soomaa / Lahemaa",                0, [], ""),
     ("LUX", "Eislek / Mullerthal",             0, [], ""),
